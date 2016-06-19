@@ -46,4 +46,15 @@ describe('versionHelper', () => {
         });
     });
 
+    describe.only('bumpFiles()', () => {
+
+        it('should succeed', (done) => {
+            versionHelper.bumpFiles(['./test/assets/package.json', './test/assets/bower.json', './test/assets/config.xml'], '2.4.11', './test/results')
+                .then(res => {
+                    done();
+                })
+                .catch(done);
+        });
+    });
+
 });

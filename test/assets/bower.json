@@ -1,0 +1,19 @@
+{
+  "name": "dummy",
+  "version": "1.4.3",
+  "description": "A dummy package",
+  "keywords": [
+    "motion",
+    "physics",
+    "particles"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "private": true
+}
