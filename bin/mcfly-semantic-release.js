@@ -9,7 +9,12 @@ const changelog = require('conventional-changelog');
 const inquirer = require('inquirer');
 const versionHelper = require('../lib/versionHelper');
 const githubHelper = require('../lib/githubHelper');
-
+const args = require('yargs').argv;
+var files = [].concat(args.files);
+var aaaaa = require(files[0]);
+console.log(aaaaa);
+console.log(args.files);
+return;
 // Repo constants
 // const repoOwner = 'hassony2';
 // const repoName = 'deploy-test';
