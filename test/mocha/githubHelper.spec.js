@@ -17,14 +17,14 @@ describe('githubHelper', () => {
 
     });
 
-    describe('getClient()', () => {
+    describe('buildClient()', () => {
         it('with json token file should succeed', () => {
-            var github = githubHelper.getClient();
+            var github = githubHelper.buildClient();
             expect(github.auth.token).to.exist;
         });
 
         it('with invalid token should throw an error', (done) => {
-            var github = githubHelper.getClient('totoxxx', 'totoyyyy');
+            var github = githubHelper.buildClient('totoxxx', 'totoyyyy');
             githubHelper.getAllRepos(github, {})
                 .catch(err => {
                     expect(err).to.exist;
@@ -33,9 +33,30 @@ describe('githubHelper', () => {
         });
     });
 
+    describe('getClient()', () => {
+        it('with invalid credentials should fail', (done) => {
+            githubHelper.getClient('xxxxx', 'yyyyyy')
+                .then(() => {
+                    done(new Error('Did not throw an error'));
+                })
+                .catch(err => {
+                    expect(err).to.exist;
+                    done();
+                });
+        });
+        it('with valid credential returns the client', (done) => {
+            githubHelper.getClient()
+                .then((github) => {
+                    expect(github.auth.token).to.exist;
+                    done();
+                })
+                .catch(done);
+        });
+    });
+
     describe('getAllRepos()', () => {
         it('should succeed', (done) => {
-            var github = githubHelper.getClient();
+            var github = githubHelper.buildClient();
             githubHelper.getAllRepos(github, {})
                 .then(repos => {
                     // check that we get a full page of 30 results (default paging for the gitub api)
@@ -49,7 +70,7 @@ describe('githubHelper', () => {
 
     describe('getRepo()', () => {
         it('should succeed', (done) => {
-            var github = githubHelper.getClient();
+            var github = githubHelper.buildClient();
             var repoName = 'mcfly-io/ngux-loader';
             githubHelper.getRepo(github, {
                     repo: repoName
@@ -60,12 +81,11 @@ describe('githubHelper', () => {
                 })
                 .catch(done);
         });
-
     });
 
     describe('getPackageJson()', () => {
         it('when package.json exist it should succeed', (done) => {
-            var github = githubHelper.getClient();
+            var github = githubHelper.buildClient();
             var repoName = 'mcfly-io/ngux-loader';
             githubHelper.getPackageJson(github, {
                     repo: repoName
@@ -79,7 +99,7 @@ describe('githubHelper', () => {
         });
 
         it('when package.json does not exist it should return null', (done) => {
-            var github = githubHelper.getClient();
+            var github = githubHelper.buildClient();
             var repoName = 'mcfly-io/wiki';
             githubHelper.getPackageJson(github, {
                     repo: repoName
@@ -90,6 +110,6 @@ describe('githubHelper', () => {
                 })
                 .catch(done);
         });
-
     });
+
 });

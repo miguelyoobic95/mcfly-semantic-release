@@ -60,3 +60,5 @@ CHANGELOG.md
 .flows_cred.json.backup
 .sessions.json
 ~*.xlsx
+
+files/
