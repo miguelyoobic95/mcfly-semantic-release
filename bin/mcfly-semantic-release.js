@@ -11,6 +11,7 @@ const versionHelper = require('../lib/versionHelper');
 const githubHelper = require('../lib/githubHelper');
 const args = require('yargs').argv;
 var files = [].concat(args.files);
+console.log(process.cwd());
 var aaaaa = require(files[0]);
 console.log(aaaaa);
 console.log(args.files);
