@@ -2,7 +2,7 @@
 var changelogScript = require('../../lib/changelog-script');
 var expect = require('chai').expect;
 
-describe.only('changelog-script', () => {
+describe('changelog-script', () => {
     describe('readGitLog()', () => {
         it('when not tag given should return log from beginning', (done) => {
             changelogScript.readGitLog('^fix|^feat|^perf|BREAKING', '')

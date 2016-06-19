@@ -6,14 +6,17 @@ var expect = require('chai').expect;
 describe('githubHelper', () => {
 
     describe('getUsername()', () => {
-        it('should succeed', (done) => {
-            githubHelper.getUsername()
-                .then(username => {
-                    expect(username).not.to.be.null;
-                    done();
-                })
-                .catch(done);
-        });
+        // disable this test when running on travis
+        if (process.env.CI !== 'true') {
+            it('should succeed', (done) => {
+                githubHelper.getUsername()
+                    .then(username => {
+                        expect(username).not.to.be.null;
+                        done();
+                    })
+                    .catch(done);
+            });
+        }
 
     });
 
