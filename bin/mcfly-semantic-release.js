@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 'use strict';
 global.Promise = require('bluebird');
 var execAsync = Promise.promisify(require('child_process').exec);
@@ -102,58 +103,58 @@ execAsync('git config user.email')
             });
         });
     })
-    .then((result) => {
-        logStreamResults(result);
-        return makeChangelog(nextVersion);
-    })
-    .then((changelogResult) => {
-        changelogContent = changelogResult;
-        console.log(changelogContent);
-        console.log('npm version ' + versionarg);
-        return execAsync('npm version ' + versionarg);
+    // .then((result) => {
+    //     logStreamResults(result);
+    //     return makeChangelog(nextVersion);
+    // })
+    // .then((changelogResult) => {
+    //     changelogContent = changelogResult;
+    //     console.log(changelogContent);
+    //     console.log('npm version ' + versionarg);
+    //     return execAsync('npm version ' + versionarg);
 
-    })
-    .then((result) => {
-        logStreamResults(result);
-        console.log('git push origin v' + nextVersion + ' --porcelain');
-        //return execAsync('git push origin v' + nextVersion + ' --porcelain');
-        return simpleGit.push('origin', 'v' + nextVersion);
-    })
-    .then((result) => {
-        logStreamResults(result);
-        console.log('delay before release...');
-    })
-    .delay(1000)
-    .then(() => {
-        var versionName = 'v' + nextVersion;
+    // })
+    // .then((result) => {
+    //     logStreamResults(result);
+    //     console.log('git push origin v' + nextVersion + ' --porcelain');
+    //     //return execAsync('git push origin v' + nextVersion + ' --porcelain');
+    //     return simpleGit.push('origin', 'v' + nextVersion);
+    // })
+    // .then((result) => {
+    //     logStreamResults(result);
+    //     console.log('delay before release...');
+    // })
+    // .delay(1000)
+    // .then(() => {
+    //     var versionName = 'v' + nextVersion;
 
-        github.authenticate({
-            type: 'basic',
-            username: credentials.username,
-            password: credentials.password
-        });
+    //     github.authenticate({
+    //         type: 'basic',
+    //         username: credentials.username,
+    //         password: credentials.password
+    //     });
 
-        return new Promise(function(resolve, reject) {
-            github.repos.createRelease({
-                user: repoOwner,
-                repo: repoName,
-                tag_name: versionName,
-                name: versionName,
-                body: changelogContent
-            }, function(err, res) {
-                if (err) {
-                    reject(err);
-                } else {
+    //     return new Promise(function(resolve, reject) {
+    //         github.repos.createRelease({
+    //             user: repoOwner,
+    //             repo: repoName,
+    //             tag_name: versionName,
+    //             name: versionName,
+    //             body: changelogContent
+    //         }, function(err, res) {
+    //             if (err) {
+    //                 reject(err);
+    //             } else {
 
-                    resolve(res);
-                }
-            });
-        });
-    })
-    .then((res) => {
-        console.log('release published at ', res.published_at);
-        console.log(chalk.green('finished'));
-    })
-    .catch(function(err) {
-        console.log(chalk.red(err));
-    });
+    //                 resolve(res);
+    //             }
+    //         });
+    //     });
+    // })
+    // .then((res) => {
+    //     console.log('release published at ', res.published_at);
+    //     console.log(chalk.green('finished'));
+    // })
+    // .catch(function(err) {
+    //     console.log(chalk.red(err));
+    // });

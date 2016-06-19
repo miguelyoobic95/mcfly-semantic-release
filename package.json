@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A cli tool to bump version and publish to github",
   "bin": {
-    "release": "./bin/mcfly-semantic-release.js"
+    "mcfly-semantic-release": "./bin/mcfly-semantic-release.js"
   },
   "dependencies": {
     "bluebird": "^3.4.0",
