@@ -19,7 +19,7 @@ In your `package.json`
 }
 ```
 
-Then you to publish a new version execute:
+Then, to publish a new version execute the following command:
 ```bash
 npm run release
 ```
