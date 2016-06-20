@@ -19,5 +19,5 @@ deploy:
   on:
     tags: true
     all_branches: true
-    node: 'v4'
+    node: '4'
     repo: mcfly-io/mcfly-semantic-release
