@@ -38,6 +38,14 @@ gitHelper.getCurrentBranch()
         return;
     })
     .then(() => {
+        return gitHelper.getRemoteRepository();
+    })
+    .then((repoInfo) => {
+        msg.repo = repoInfo.repo;
+        msg.owner = repoInfo.owner;
+        msg.repoUrl = repoInfo.url;
+    })
+    .then(() => {
         return githubHelper.getUsername();
     })
     .then((username) => {
@@ -72,12 +80,7 @@ gitHelper.getCurrentBranch()
         return;
     })
     .then(() => {
-        return gitHelper.getRemoteRepository();
-    })
-    .then((repoInfo) => {
-        msg.repo = repoInfo.repo;
-        msg.owner = repoInfo.owner;
-        changelogScript.init(repoInfo.url);
+        changelogScript.init(msg.repoUrl);
         return changelogScript.generate(msg.nextVersion)
             .then((changelogContent) => {
                 msg.changelogContent = changelogContent;
