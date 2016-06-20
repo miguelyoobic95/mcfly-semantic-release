@@ -34,6 +34,15 @@ gitHelper.getCurrentBranch()
         return;
     })
     .then(() => {
+        return gitHelper.isClean()
+            .then(res => {
+                if (!res) {
+                    throw new Error('Your repository has unstaged changes, you must commit your work before releasing a new version');
+                }
+                return res;
+            });
+    })
+    .then(() => {
         return gitHelper.getRemoteRepository();
     })
     .then((repoInfo) => {

@@ -15,7 +15,7 @@ describe('gitHelper', () => {
                 .catch(done);
         });
     });
-    describe('getRemoteRepository', () => {
+    describe('getRemoteRepository()', () => {
         it('should return remote repository', (done) => {
 
             gitHelper.getRemoteRepository()
@@ -24,6 +24,18 @@ describe('gitHelper', () => {
                     expect(remote.repo).to.not.be.null;
                     expect(remote.owner).to.not.be.null;
                     expect(_.startsWith(remote.url, 'https://')).to.be.true;
+                    done();
+                })
+                .catch(done);
+        });
+    });
+
+    describe('isClean()', () => {
+        it('should return a boolean', (done) => {
+
+            gitHelper.isClean()
+                .then(res => {
+                    expect(res).to.be.a('boolean');
                     done();
                 })
                 .catch(done);
