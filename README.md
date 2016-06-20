@@ -8,7 +8,7 @@
 
 ## Installation
 ```bash
-npm i --save mcfly-semantic-release
+npm i --save-dev mcfly-semantic-release
 ```
 
 ## Usage
