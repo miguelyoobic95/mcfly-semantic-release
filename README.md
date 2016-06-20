@@ -19,6 +19,16 @@ In your `package.json`
 }
 ```
 
+Optionnaly additional files can be added to also have their version bumped
+
+```json
+"scripts": {
+"release": "mcfly-semantic-release.js --files ./package.json ./bower.json ./config.xml"
+}
+```
+
+Note that the path for the `--files` option is relative to your current root directory
+
 Then, to publish a new version execute the following command:
 ```bash
 npm run release

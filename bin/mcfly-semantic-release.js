@@ -2,51 +2,57 @@
 
 'use strict';
 global.Promise = require('bluebird');
-var execAsync = Promise.promisify(require('child_process').exec);
-const simpleGit = require('simple-git')();
+
+const args = require('yargs').argv;
 const chalk = require('chalk');
-const changelog = require('conventional-changelog');
-const inquirer = require('inquirer');
-const versionHelper = require('../lib/versionHelper');
+const changelogScript = require('../lib/changelog-script');
+const gitHelper = require('../lib/githelper');
 const githubHelper = require('../lib/githubHelper');
+const inquirer = require('inquirer');
+const path = require('path');
+const versionHelper = require('../lib/versionHelper');
+const _ = require('lodash');
 
-// Repo constants
-// const repoOwner = 'hassony2';
-// const repoName = 'deploy-test';
+var files = args.files ? [].concat(args.files) : [];
 
-function makeChangelog(version) {
-    return new Promise(function(resolve, reject) {
-        var changelogString = '';
-        var changeStream = changelog({
-            preset: 'angular'
-        }, {
-            version: version
-        });
-        changeStream.on('error', function(err) {
-            console.log(err);
-            reject(err);
-        });
-        changeStream.on('data', (chunk) => {
-            changelogString += chunk;
-        });
-        changeStream.on('end', () => {
-            resolve(changelogString);
-        });
-    });
+if (files.length === 0) {
+    files.push('./package.json');
 }
-
-const pkg = require('../package.json');
-const currentVersion = pkg.version;
-let versionarg = process.argv[2];
-if (versionarg !== 'patch' && versionarg !== 'minor' && versionarg !== 'major') {
-    versionarg = 'patch';
-}
-const nextVersion = versionHelper.bump(currentVersion, versionarg);
+files = _.map(files, (file) => {
+    return path.isAbsolute(file) ? file : path.join(process.cwd(), file);
+});
 
 var msg = {};
-var changelogContent;
+msg.currentVersion = versionHelper.getCurrentVersion(path.join(process.cwd(), './package.json'));
+msg.nextVersion = versionHelper.bump(msg.currentVersion, args.type);
 
-githubHelper.getUsername()
+gitHelper.getCurrentBranch()
+    .then((currentBranch) => {
+        if (currentBranch !== 'master') {
+            throw new Error('To create a release you must be on the master branch');
+        }
+        return;
+    })
+    .then(() => {
+        return gitHelper.isClean()
+            .then(res => {
+                if (!res) {
+                    throw new Error('Your repository has unstaged changes, you must commit your work before releasing a new version');
+                }
+                return res;
+            });
+    })
+    .then(() => {
+        return gitHelper.getRemoteRepository();
+    })
+    .then((repoInfo) => {
+        msg.repo = repoInfo.repo;
+        msg.owner = repoInfo.owner;
+        msg.repoUrl = repoInfo.url;
+    })
+    .then(() => {
+        return githubHelper.getUsername();
+    })
     .then((username) => {
         msg.username = username;
         return inquirer.prompt([{
@@ -70,60 +76,41 @@ githubHelper.getUsername()
         }]);
     })
     .then((answers) => {
+        console.log(chalk.yellow('Github authentication...'));
         msg.username = answers.username || msg.username;
         msg.password = answers.password;
-
         return githubHelper.getClient(msg.username, msg.password);
     })
     .then((github) => {
         msg.github = github;
-        return makeChangelog(nextVersion);
+        return;
     })
-    .then((changelogResult) => {
-        changelogContent = changelogResult;
-        console.log(changelogContent);
-        console.log('npm version ' + versionarg);
-        return execAsync('npm version ' + versionarg);
-
+    .then(() => {
+        console.log(chalk.yellow('Generating changelog...'));
+        changelogScript.init(msg.repoUrl);
+        return changelogScript.generate(msg.nextVersion)
+            .then((changelogContent) => {
+                msg.changelogContent = changelogContent;
+                return msg;
+            });
     })
-    .then((result) => {
-        console.log('git push origin v' + nextVersion + ' --porcelain');
-        //return execAsync('git push origin v' + nextVersion + ' --porcelain');
-        return simpleGit.push('origin', 'v' + nextVersion);
+    .then((msg) => {
+        console.log(chalk.yellow('Bumping files...'));
+        return versionHelper.bumpFiles(files, msg.nextVersion)
+            .then(() => msg);
     })
-    .then((result) => {
-        console.log('delay before release...');
+    .then((msg) => {
+        console.log(chalk.yellow('Commiting version...'));
+        return gitHelper.commitVersion(msg.nextVersion)
+            .then(() => msg);
     })
     .delay(1000)
-    .then(() => {
-        // var versionName = 'v' + nextVersion;
-
-        // github.authenticate({
-        //     type: 'basic',
-        //     username: msg.username,
-        //     password: msg.password
-        // });
-
-        // return new Promise(function(resolve, reject) {
-        //     github.repos.createRelease({
-        //         user: repoOwner,
-        //         repo: repoName,
-        //         tag_name: versionName,
-        //         name: versionName,
-        //         body: changelogContent
-        //     }, function(err, res) {
-        //         if (err) {
-        //             reject(err);
-        //         } else {
-
-        //             resolve(res);
-        //         }
-        //     });
-        // });
+    .then((msg) => {
+        console.log(chalk.yellow('Publishing version...'));
+        return githubHelper.createRelease(msg);
     })
     .then((res) => {
-        console.log('release published at ', res.published_at);
-        console.log(chalk.green('finished'));
+        console.log(chalk.green(`Release ${res.name} successfully published!`));
     })
     .catch(function(err) {
         console.log(chalk.red(err));
