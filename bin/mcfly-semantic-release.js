@@ -22,10 +22,6 @@ files = _.map(files, (file) => {
     return path.isAbsolute(file) ? file : path.join(process.cwd(), file);
 });
 
-// Repo constants
-// const repoOwner = 'hassony2';
-// const repoName = 'deploy-test';
-
 var msg = {};
 msg.currentVersion = versionHelper.getCurrentVersion(path.join(process.cwd(), './package.json'));
 msg.nextVersion = versionHelper.bump(msg.currentVersion, args.type);
@@ -71,6 +67,7 @@ gitHelper.getCurrentBranch()
         }]);
     })
     .then((answers) => {
+        console.log(chalk.yellow('Github authentication...'));
         msg.username = answers.username || msg.username;
         msg.password = answers.password;
         return githubHelper.getClient(msg.username, msg.password);
@@ -80,6 +77,7 @@ gitHelper.getCurrentBranch()
         return;
     })
     .then(() => {
+        console.log(chalk.yellow('Generating changelog...'));
         changelogScript.init(msg.repoUrl);
         return changelogScript.generate(msg.nextVersion)
             .then((changelogContent) => {
@@ -88,20 +86,22 @@ gitHelper.getCurrentBranch()
             });
     })
     .then((msg) => {
+        console.log(chalk.yellow('Bumping files...'));
         return versionHelper.bumpFiles(files, msg.nextVersion)
             .then(() => msg);
     })
     .then((msg) => {
+        console.log(chalk.yellow('Commiting version...'));
         return gitHelper.commitVersion(msg.nextVersion)
             .then(() => msg);
     })
     .delay(1000)
     .then((msg) => {
+        console.log(chalk.yellow('Publishing version...'));
         return githubHelper.createRelease(msg);
     })
     .then((res) => {
-        console.log('release published at ', res.published_at);
-        console.log(chalk.green('finished'));
+        console.log(chalk.green(`Release ${res.name} successfully published!`));
     })
     .catch(function(err) {
         console.log(chalk.red(err));
