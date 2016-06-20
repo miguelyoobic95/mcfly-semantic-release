@@ -13,7 +13,7 @@ const path = require('path');
 const versionHelper = require('../lib/versionHelper');
 const _ = require('lodash');
 
-var files = [].concat(args.files);
+var files = args.files ? [].concat(args.files) : [];
 
 if (files.length === 0) {
     files.push('./package.json');
