@@ -16,7 +16,7 @@ describe('gitHelper', () => {
         });
     });
     describe('getRemoteRepository()', () => {
-        it('should return remote repository', (done) => {
+        it('should return remote origin repository', (done) => {
 
             gitHelper.getRemoteRepository()
                 .then(remote => {
@@ -27,6 +27,17 @@ describe('gitHelper', () => {
                     done();
                 })
                 .catch(done);
+        });
+
+        it('should throw error with an unknow remote', (done) => {
+            gitHelper.getRemoteRepository('dummy')
+                .then(remote => {
+                    done(new Error('should throw an error'));
+                })
+                .catch(err => {
+                    expect(err).not.to.be.null;
+                    done();
+                });
         });
     });
 

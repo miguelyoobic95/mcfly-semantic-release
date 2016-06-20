@@ -15,7 +15,7 @@ npm i --save-dev mcfly-semantic-release
 In your `package.json`
 ```json
 "scripts": {
-	"release": "mcfly-semantic-release"
+  "release": "mcfly-semantic-release"
 }
 ```
 
@@ -23,7 +23,7 @@ Optionnaly additional files can be added to also have their version bumped
 
 ```json
 "scripts": {
-"release": "mcfly-semantic-release.js --files ./package.json ./bower.json ./config.xml"
+  "release": "mcfly-semantic-release.js --files ./package.json ./bower.json ./config.xml"
 }
 ```
 
