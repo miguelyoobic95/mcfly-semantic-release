@@ -1,6 +1,8 @@
 'use strict';
 const expect = require('chai').expect;
-let versionHelper = require('../../lib/versionHelper');
+const versionHelper = require('../../lib/versionHelper');
+const fileHelper = require('../../lib/fileHelper');
+const _ = require('lodash');
 
 describe('versionHelper', () => {
     describe('filterFiles()', () => {
@@ -46,11 +48,30 @@ describe('versionHelper', () => {
         });
     });
 
-    describe.only('bumpFiles()', () => {
+    describe('bumpFiles()', () => {
 
         it('should succeed', (done) => {
-            versionHelper.bumpFiles(['./test/assets/package.json', './test/assets/bower.json', './test/assets/config.xml'], '2.4.11', './test/results')
+            var files = ['./test/assets/package.json', './test/assets/bower.json', './test/assets/config.xml'];
+            var version = '3.4.11';
+            versionHelper.bumpFiles(files, version, './test/results')
                 .then(res => {
+                    expect(res).to.be.an('array');
+                    expect(res.length).to.equal(files.length);
+                    var packageJson = fileHelper.readTextFile('./test/results/package.json');
+                    var bowerJson = fileHelper.readTextFile('./test/results/bower.json');
+                    var configXML = fileHelper.readTextFile('./test/results/config.xml');
+                    expect(JSON.parse(packageJson).version).to.equal(version);
+                    expect(JSON.parse(bowerJson).version).to.equal(version);
+                    expect(configXML.indexOf(`version="${version}"`)).to.be.above(1);
+                    expect(_.find(res, {
+                        file: files[0]
+                    }).content).to.equal(packageJson);
+                    expect(_.find(res, {
+                        file: files[1]
+                    }).content).to.equal(bowerJson);
+                    expect(_.find(res, {
+                        file: files[2]
+                    }).content).to.equal(configXML);
                     done();
                 })
                 .catch(done);
