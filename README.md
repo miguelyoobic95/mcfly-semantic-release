@@ -27,13 +27,25 @@ Optionnaly additional files can be added to also have their version bumped
 }
 ```
 
-Note that the path for the `--files` option is relative to your current root directory
+> **NOTE**    
+> the path for the `--files` option is relative to your current root directory
 
 Then, to publish a new version execute the following command:
+
 ```bash
 npm run release
 ```
 
+By default, this will publish a patch version, if you want to control the semver option you can pass an optional 'patch', 'minor' or 'major' type argument.
+
+**Example :**
+
+```bash
+npm run release -- --type=minor
+```
+
+> **NOTE**    
+> The double `--` is necessary, this is how npm script propagates its arguments
 
 
 [npm-image]: https://badge.fury.io/js/mcfly-semantic-release.svg
