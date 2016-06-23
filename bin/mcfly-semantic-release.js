@@ -103,7 +103,7 @@ gitHelper.getCurrentBranch()
             .then(() => msg);
     })
     .then((msg) => {
-        console.log(chalk.yellow('Commiting version...'));
+        console.log(chalk.yellow('Committing version...'));
         return gitHelper.commitVersion(msg.nextVersion)
             .then(() => msg);
     })
