@@ -56,7 +56,7 @@ gitHelper.getCurrentBranch()
     .then((username) => {
         msg.username = username;
         if (username) {
-            console.log(`Hello ${username} let's publish a new verion`);
+            console.log(`Hello ${chalk.bold(chalk.cyan(username))}, let's publish a new version...`);
         }
         return inquirer.prompt([{
             type: 'input',
