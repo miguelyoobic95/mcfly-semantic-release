@@ -55,6 +55,9 @@ gitHelper.getCurrentBranch()
     })
     .then((username) => {
         msg.username = username;
+        if (username) {
+            console.log('Hello ${username}');
+        }
         return inquirer.prompt([{
             type: 'input',
             message: 'Please enter your GitHub username',
