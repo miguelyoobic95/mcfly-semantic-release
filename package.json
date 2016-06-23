@@ -34,7 +34,7 @@
         "lint": "npm run eslint",
         "pretest": "npm run eslint",
         "test": "npm run mocha",
-        "mocha": "istanbul cover --root . --include-all-sources -x **/coverage/** -x **/client/** -x **/files/** -x **/node_modules/** --dir ./coverage/mocha --report text --report text-summary --report lcov --print none  _mocha -- test/mocha/**/*.spec.js --reporter spec --timeout 10000",
+        "mocha": "istanbul cover --root . --include-all-sources -x **/coverage/** -x **/client/** -x **/files/** -x **/node_modules/** -x **/bin/**  --dir ./coverage/mocha --report text --report text-summary --report lcov --print none  _mocha -- test/mocha/**/*.spec.js --reporter spec --timeout 10000",
         "mocha:watch": "mocha test/mocha/**/*.spec.js -R nyan -w --timeout 10000",
         "release": "node bin/mcfly-semantic-release.js"
     },
