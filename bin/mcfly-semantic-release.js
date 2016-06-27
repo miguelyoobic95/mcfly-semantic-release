@@ -6,6 +6,7 @@ global.Promise = require('bluebird');
 const args = require('yargs').argv;
 const chalk = require('chalk');
 const changelogScript = require('../lib/changelog-script');
+const retryHelper = require('../lib/retryHelper');
 const gitHelper = require('../lib/githelper');
 const githubHelper = require('mcfly-github');
 const inquirer = require('inquirer');
@@ -110,7 +111,14 @@ gitHelper.getCurrentBranch()
     .delay(1000)
     .then((msg) => {
         console.log(chalk.yellow('Publishing version...'));
-        return githubHelper.createRelease(msg);
+        return retryHelper.retry(function() {
+                githubHelper.createRelease(msg);
+            })
+            .catch(err => {
+                console.log(chalk.red('An error occurred when publishing the version'));
+                console.log('Your changelog is:\n', msg.changelogContent);
+                throw err;
+            });
     })
     .then((res) => {
         console.log(chalk.green(`Release ${res.name} successfully published!`));
