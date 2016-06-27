@@ -111,8 +111,9 @@ gitHelper.getCurrentBranch()
     .delay(1000)
     .then((msg) => {
         console.log(chalk.yellow('Publishing version...'));
-        return retryHelper.retry(function() {
-                githubHelper.createRelease(msg);
+        return retryHelper
+            .retry(function() {
+                return githubHelper.createRelease(msg);
             })
             .catch(err => {
                 console.log(chalk.red('An error occurred when publishing the version'));
