@@ -16,13 +16,31 @@ describe('gitHelper', () => {
         });
     });
 
-    describe('transformRemite()', () => {
+    describe('transformRemote()', () => {
         it('should succeed with an http url', () => {
             var remote = {
                 name: 'origin',
                 refs: {
                     fetch: 'https://github.com/mcfly-io/mcfly-semantic-release',
                     push: 'https://github.com/mcfly-io/mcfly-semantic-release'
+                }
+            };
+
+            var retval = gitHelper.transformRemote(remote);
+            expect(retval).to.deep.equal({
+                url: 'https://github.com/mcfly-io/mcfly-semantic-release',
+                owner: 'mcfly-io',
+                repo: 'mcfly-semantic-release'
+            });
+
+        });
+
+        it('should succeed with an http url ending with /', () => {
+            var remote = {
+                name: 'origin',
+                refs: {
+                    fetch: 'https://github.com/mcfly-io/mcfly-semantic-release/',
+                    push: 'https://github.com/mcfly-io/mcfly-semantic-release/'
                 }
             };
 
