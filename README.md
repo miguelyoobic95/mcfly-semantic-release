@@ -47,6 +47,26 @@ npm run release -- --type=minor
 > **NOTE**    
 > The double `--` is necessary, this is how npm script propagates its arguments
 
+#### Alternate github authentication methods
+
+By default `mcfly-semantic-release` uses basic username & password auth to communicate with github. Whem it runs, you will be prompted for your github username and password before the release will run. If your username for github is available in your git config, `mcfly-semantic-release` will find it and not prompt you to enter it.
+
+As an alternative to basic auth, you can provide an oauth token (see [github oauth](https://developer.github.com/v3/oauth/)). To use a token, make sure it is valid and has the correct scopes for the repo you're releasing and then pass it as `$GITHUB_TOKEN`. Then, when prompted for your password, just leave it lank and hit enter and the token will be used for the authentication!
+```sh
+~/dev/mcfly-io/mcfly-semantic-release $> GITHUB_TOKEN=<oauth_token> npm run release
+
+> mcfly-semantic-release@1.0.15 release /Users/marty/dev/mcfly-io/mcfly-semantic-release
+> node bin/mcfly-semantic-release.js
+
+Hello marty@mcfly.io, let's publish a new version...
+? Please enter your GitHub password (leave blank to use $GITHUB_TOKEN)
+Github authentication...
+Generating changelog...
+Bumping files...
+Committing version...
+Publishing version...
+Release v1.0.16 successfully published!
+```
 
 [npm-image]: https://badge.fury.io/js/mcfly-semantic-release.svg
 [npm-url]: https://npmjs.org/package/mcfly-semantic-release
