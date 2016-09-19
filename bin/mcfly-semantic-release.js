@@ -72,17 +72,14 @@ gitHelper.getCurrentBranch()
             }
         }, {
             type: 'password',
-            message: 'Please enter your GitHub password',
-            name: 'password',
-            validate: function(input) {
-                return input !== '';
-            }
+            message: 'Please enter your GitHub password (leave blank to use $GITHUB_TOKEN)',
+            name: 'password'
         }]);
     })
     .then((answers) => {
         console.log(chalk.yellow('Github authentication...'));
         msg.username = answers.username || msg.username;
-        msg.password = answers.password;
+        msg.password = answers.password || null;
         return githubHelper.getClient(msg.username, msg.password);
     })
     .then((github) => {
