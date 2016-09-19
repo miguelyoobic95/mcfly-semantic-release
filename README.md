@@ -51,7 +51,7 @@ npm run release -- --type=minor
 
 By default `mcfly-semantic-release` uses basic username & password auth to communicate with github. Whem it runs, you will be prompted for your github username and password before the release will run. If your username for github is available in your git config, `mcfly-semantic-release` will find it and not prompt you to enter it.
 
-As an alternative to basic auth, you can provide an oauth token (see [github oauth](https://developer.github.com/v3/oauth/)). To use a token, make sure it is valid and has the correct scopes for the repo you're releasing and then pass it as `$GITHUB_TOKEN`. Then, when prompted for your password, just leave it lank and hit enter and the token will be used for the authentication!
+As an alternative to basic auth, you can provide an oauth token (see [github oauth](https://developer.github.com/v3/oauth/)). To use a token, make sure it is valid and has the correct scopes for the repo and then pass it as `$GITHUB_TOKEN`. Then, when prompted for your password, just leave it blank and hit enter and the token will be used for the authentication!
 ```sh
 ~/dev/mcfly-io/mcfly-semantic-release $> GITHUB_TOKEN=<oauth_token> npm run release
 
