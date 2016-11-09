@@ -1,6 +1,6 @@
 {
   "name": "mcfly-semantic-release",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "description": "A cli tool to bump version and publish to github",
   "bin": {
     "mcfly-semantic-release": "./bin/mcfly-semantic-release.js"
