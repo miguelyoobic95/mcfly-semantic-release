@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+/* eslint no-console:0 */
 'use strict';
 global.Promise = require('bluebird');
 
@@ -57,7 +58,7 @@ gitHelper.getCurrentBranch()
     .then((username) => {
         msg.username = username;
         if (username) {
-            console.log(`Hello ${chalk.bold(chalk.cyan(username))}, let's publish a new version...`);
+            console.log(`Hello ${chalk.bold(chalk.cyan(username))}, let's publish a new version ${chalk.bold(chalk.yellow(msg.nextVersion))}...`);
         }
         return inquirer.prompt([{
             type: 'input',
