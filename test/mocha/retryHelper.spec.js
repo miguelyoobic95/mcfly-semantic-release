@@ -21,7 +21,7 @@ var mockPromise = sinon.spy(function(obj) {
 describe('retryHelper', () => {
     describe('retry()', () => {
         beforeEach(function() {
-            mockPromise.reset();
+            mockPromise.resetHistory();
         });
 
         it('with standard option should succeed', done => {

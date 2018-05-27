@@ -8,22 +8,23 @@ const args = require('yargs').argv;
 const chalk = require('chalk');
 const changelogScript = require('../lib/changelog-script');
 const retryHelper = require('../lib/retryHelper');
+const fileHelper = require('../lib/fileHelper');
 const gitHelper = require('../lib/githelper');
 const githubHelper = require('mcfly-github');
 const inquirer = require('inquirer');
 const path = require('path');
 const versionHelper = require('../lib/versionHelper');
-const _ = require('lodash');
 
-var files = args.files ? [].concat(args.files) : [];
+// var files = args.files ? [].concat(args.files) : [];
 
-if (files.length === 0) {
-    files.push('./package.json');
-}
-files = _.map(files, (file) => {
-    return path.isAbsolute(file) ? file : path.join(process.cwd(), file);
-});
+// if (files.length === 0) {
+//     files.push('./package.json');
+// }
+// files = _.map(files, (file) => {
+//     return path.isAbsolute(file) ? file : path.join(process.cwd(), file);
+// });
 
+var files = fileHelper.getFiles(args.files);
 var msg = {};
 msg.currentVersion = versionHelper.getCurrentVersion(path.join(process.cwd(), './package.json'));
 msg.nextVersion = versionHelper.bump(msg.currentVersion, args.type);

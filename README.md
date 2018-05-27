@@ -19,11 +19,11 @@ In your `package.json`
 }
 ```
 
-Optionnaly additional files can be added to also have their version bumped
+Optionnaly additional files or files patterns (globs) can be added to also have their version bumped
 
 ```json
 "scripts": {
-  "release": "mcfly-semantic-release.js --files ./package.json ./bower.json ./config.xml"
+  "release": "mcfly-semantic-release.js --files ./package.json ./bower.json ./config.xml ./projects/**/package.json"
 }
 ```
 
