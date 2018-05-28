@@ -4,7 +4,6 @@
 'use strict';
 global.Promise = require('bluebird');
 
-const args = require('yargs').argv;
 const chalk = require('chalk');
 const changelogScript = require('../lib/changelog-script');
 const retryHelper = require('../lib/retryHelper');
@@ -14,7 +13,11 @@ const githubHelper = require('mcfly-github');
 const inquirer = require('inquirer');
 const path = require('path');
 const versionHelper = require('../lib/versionHelper');
-
+const args = require('yargs')
+.option('files', {
+    type: 'array',
+    desc: 'Files and files patterns to change'
+}).argv;
 // var files = args.files ? [].concat(args.files) : [];
 
 // if (files.length === 0) {
@@ -24,12 +27,17 @@ const versionHelper = require('../lib/versionHelper');
 //     return path.isAbsolute(file) ? file : path.join(process.cwd(), file);
 // });
 
-var files = fileHelper.getFiles(args.files);
+var files;
 var msg = {};
 msg.currentVersion = versionHelper.getCurrentVersion(path.join(process.cwd(), './package.json'));
 msg.nextVersion = versionHelper.bump(msg.currentVersion, args.type);
-
-gitHelper.getCurrentBranch()
+console.log('ARGS', args.files);
+fileHelper.getFiles(args.files)
+    .then(res => {
+        console.log('FILES', res);
+        files = res;
+        return gitHelper.getCurrentBranch();
+    })
     .then((currentBranch) => {
         if (currentBranch !== 'master') {
             throw new Error('To create a release you must be on the master branch');
@@ -98,7 +106,7 @@ gitHelper.getCurrentBranch()
             });
     })
     .then((msg) => {
-        console.log(chalk.yellow('Bumping files...'));
+        console.log(chalk.yellow('Bumping files...', files));
         return versionHelper.bumpFiles(files, msg.nextVersion)
             .then(() => msg);
     })
