@@ -31,10 +31,8 @@ var files;
 var msg = {};
 msg.currentVersion = versionHelper.getCurrentVersion(path.join(process.cwd(), './package.json'));
 msg.nextVersion = versionHelper.bump(msg.currentVersion, args.type);
-console.log('ARGS', args.files);
 fileHelper.getFiles(args.files)
     .then(res => {
-        console.log('FILES', res);
         files = res;
         return gitHelper.getCurrentBranch();
     })
