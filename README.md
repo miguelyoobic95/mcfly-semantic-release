@@ -6,6 +6,7 @@
 
 [![NPM][npm-nodei-image]][npm-nodei-url]
 
+
 ## Installation
 ```bash
 npm i --save-dev mcfly-semantic-release
@@ -19,7 +20,13 @@ In your `package.json`
 }
 ```
 
-Optionnaly additional files or files patterns (globs) can be added to also have their version bumped
+Running release will do the following: 
+- Bumps version. By default, this will publish a patch version, if you want to control the semver option you can pass an optional 'patch', 'minor' or 'major' to the `--type` argument.
+- Updates version in files: by default it will only update the root level `package.json`. Optionnaly use `--file` to specify file paths or files patterns (globs) that can have their version updated as well.  Files can be `package.json` files or `config.xml` files
+- Commit the changed files with a standard commit message. Default message is `chore(app): Version <version number>`. Use `--production` to suffix the commit message with the work `production` (can be later used in CI)
+- Generates changlog based on Angular standard commit messages.
+- Generate a tag with the version number. 
+- Generates a github release with the version number.
 
 ```json
 "scripts": {
@@ -35,8 +42,6 @@ Then, to publish a new version execute the following command:
 ```bash
 npm run release
 ```
-
-By default, this will publish a patch version, if you want to control the semver option you can pass an optional 'patch', 'minor' or 'major' type argument.
 
 **Example :**
 
