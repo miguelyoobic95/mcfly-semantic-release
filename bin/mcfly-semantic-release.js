@@ -14,18 +14,9 @@ const inquirer = require('inquirer');
 const path = require('path');
 const versionHelper = require('../lib/versionHelper');
 const args = require('yargs')
-.option('files', {
-    type: 'array',
-    desc: 'Files and files patterns to change'
-}).argv;
-// var files = args.files ? [].concat(args.files) : [];
-
-// if (files.length === 0) {
-//     files.push('./package.json');
-// }
-// files = _.map(files, (file) => {
-//     return path.isAbsolute(file) ? file : path.join(process.cwd(), file);
-// });
+    .option('files', { type: 'array',  desc: 'Files and files patterns to change'})
+    .option('production', {type: 'boolean', desc: 'Generate production commit message'})
+    .argv;
 
 var files;
 var msg = {};
@@ -110,7 +101,7 @@ fileHelper.getFiles(args.files)
     })
     .then((msg) => {
         console.log(chalk.yellow('Committing version...'));
-        return gitHelper.commitVersion(msg.nextVersion)
+        return gitHelper.commitVersion(msg.nextVersion, args.production)
             .then(() => msg);
     })
     .delay(1000)
