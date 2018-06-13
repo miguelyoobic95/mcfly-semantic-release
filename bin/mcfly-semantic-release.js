@@ -122,4 +122,5 @@ fileHelper.getFiles(args.files)
     })
     .catch(function(err) {
         console.log(chalk.red(err));
+        return process.exit(1); //eslint-disable-line no-process-exit
     });
