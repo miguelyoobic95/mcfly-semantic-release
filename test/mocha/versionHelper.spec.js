@@ -34,6 +34,10 @@ describe('versionHelper', () => {
             expect(versionHelper.bump('2.3.1', 'major')).to.equal('3.0.0');
 
         });
+        it('should cater for prereleases', () => {
+            expect(versionHelper.bump('2.3.1', 'prerelease')).to.equal('2.3.2-0');
+            expect(versionHelper.bump('2.3.2-4', 'patch')).to.equal('2.3.2');
+        });
 
         it('should default to patch when no bumpType', () => {
             expect(versionHelper.bump('1.0.12')).to.equal('1.0.13');
