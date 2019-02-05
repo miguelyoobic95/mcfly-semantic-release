@@ -50,6 +50,11 @@ describe('versionHelper', () => {
         it('should return 0.0.1 when initial version is empty', () => {
             expect(versionHelper.bump()).to.equal('0.0.1');
         });
+
+        it('should return 0.0.1 when initial version is invalid', () => {
+            expect(versionHelper.bump('something')).to.equal('0.0.1');
+        });
+
     });
 
     describe('bumpFiles()', () => {
