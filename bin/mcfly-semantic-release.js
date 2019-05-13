@@ -101,7 +101,7 @@ fileHelper.getFiles(args.files)
     })
     .then((msg) => {
         console.log(chalk.yellow('Committing version...'));
-        return gitHelper.commitVersion(msg.nextVersion, args.production)
+        return gitHelper.commitVersion(msg.nextVersion, args.production, files)
             .then(() => msg);
     })
     .delay(1000)
