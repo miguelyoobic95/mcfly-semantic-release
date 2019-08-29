@@ -14,8 +14,9 @@ const inquirer = require('inquirer');
 const path = require('path');
 const versionHelper = require('../lib/versionHelper');
 const args = require('yargs')
-    .option('files', { type: 'array',  desc: 'Files and files patterns to change'})
-    .option('production', {type: 'boolean', desc: 'Generate production commit message'})
+    .option('files', { type: 'array', desc: 'Files and files patterns to change' })
+    .option('production', { type: 'boolean', desc: 'Generate production commit message' })
+    .option('hotfix', { type: 'boolean', desc: 'Generate a hotfix release' })
     .argv;
 
 var files;
@@ -28,7 +29,7 @@ fileHelper.getFiles(args.files)
         return gitHelper.getCurrentBranch();
     })
     .then((currentBranch) => {
-        if (currentBranch !== 'master') {
+        if (currentBranch !== 'master' && !args.hotfix) {
             throw new Error('To create a release you must be on the master branch');
         }
         return;
@@ -56,17 +57,17 @@ fileHelper.getFiles(args.files)
     .then((username) => {
         msg.username = username;
         if (username) {
-            console.log(`Hello ${chalk.bold(chalk.cyan(username))}, let's publish a new version ${chalk.bold(chalk.yellow(msg.nextVersion))}...`);
+            console.log(`Hello ${chalk.bold(chalk.cyan(username))}, let's publish a new ${args.hotfix ? 'hotfix' : ''} version ${chalk.bold(chalk.yellow(msg.nextVersion))}...`);
         }
         return inquirer.prompt([{
             type: 'input',
             message: 'Please enter your GitHub username',
             name: 'username',
             default: username,
-            when: function() {
+            when: function () {
                 return username.length <= 0;
             },
-            validate: function(input) {
+            validate: function (input) {
                 return input !== '';
             }
         }, {
@@ -108,7 +109,7 @@ fileHelper.getFiles(args.files)
     .then((msg) => {
         console.log(chalk.yellow('Publishing version...'));
         return retryHelper
-            .retry(function() {
+            .retry(function () {
                 return githubHelper.createRelease(msg);
             })
             .catch(err => {
@@ -120,7 +121,7 @@ fileHelper.getFiles(args.files)
     .then((res) => {
         console.log(chalk.green(`Release ${res.name} successfully published!`));
     })
-    .catch(function(err) {
+    .catch(function (err) {
         console.log(chalk.red(err));
         return process.exit(1); //eslint-disable-line no-process-exit
     });
