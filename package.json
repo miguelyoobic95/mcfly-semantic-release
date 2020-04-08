@@ -22,16 +22,19 @@
     "yargs": "^13.2.4"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "2.27.0",
+    "@typescript-eslint/parser": "2.27.0",
     "chai": "^4.1.2",
     "coveralls": "^3.0.1",
-    "eslint": "^5.16.0",
-    "eslint-plugin-json": "^1.2.0",
-    "eslint-plugin-nodeca": "^1.0.3",
-    "istanbul": "^1.1.0-alpha.1",
+    "eslint": "6.8.0",
+    "eslint-config-prettier": "6.10.1",
+    "eslint-plugin-prettier": "3.1.2",
     "mocha": "^6.1.4",
+    "prettier": "2.0.4",
     "semver": "^6.0.0",
     "sinon": "^7.3.2",
-    "sinon-chai": "^3.1.0"
+    "sinon-chai": "3.1.0",
+    "typescript": "3.8.3"
   },
   "scripts": {
     "eslint": "eslint .",
@@ -46,17 +49,14 @@
     "lib",
     "bin"
   ],
-  "engines": {
-    "node": ">= 8"
-  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mcfly-io/mcfly-semantic-release.git"
+    "url": "git+https://github.com/miguelyoobic95/semantic-release-next.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mcfly-io/mcfly-semantic-release/issues"
+    "url": "https://github.com/miguelyoobic95/semantic-release-next/issues"
   },
-  "homepage": "https://github.com/mcfly-io/mcfly-semantic-release#readme"
+  "homepage": "https://github.com/miguelyoobic95/semantic-release-next#readme"
 }
