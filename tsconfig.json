@@ -4,10 +4,17 @@
         "esModuleInterop": true,
         "target": "es6",
         "moduleResolution": "node",
+        "noUnusedLocals": true,
         "sourceMap": true,
         "outDir": "dist"
     },
     "lib": [
-        "es2015"
+        "esnext"
+    ],
+    "include": [
+        "lib/**/*"
+    ],
+    "exclude": [
+        "node_modules"
     ]
 }

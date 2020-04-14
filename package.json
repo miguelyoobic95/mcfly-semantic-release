@@ -1,10 +1,22 @@
 {
-  "name": "mcfly-semantic-release",
-  "version": "1.2.1",
-  "description": "A cli tool to bump version and publish to github",
-  "bin": {
-    "mcfly-semantic-release": "./bin/mcfly-semantic-release.js"
+  "name": "semantic-release-next",
+  "version": "1.0.0",
+  "description": "A cli tool to bump versions and publish to github",
+  "main": "dist/semantic-release-next.js",
+  "scripts": {
+    "lint": "eslint src/**/*.ts",
+    "build": "rm -rf dist && tsc --incremental",
+    "release": "node dist/semantic-release-next"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miguelyoobic95/semantic-release-next.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "files": [
+    "dist/"
+  ],
   "dependencies": {
     "bluebird": "^3.5.4",
     "bluebird-retry": "^0.11.0",
@@ -22,39 +34,17 @@
     "yargs": "^13.2.4"
   },
   "devDependencies": {
+    "@types/node": "^13.11.0",
+    "@types/yargs": "^15.0.4",
     "@typescript-eslint/eslint-plugin": "2.27.0",
     "@typescript-eslint/parser": "2.27.0",
-    "chai": "^4.1.2",
-    "coveralls": "^3.0.1",
     "eslint": "6.8.0",
     "eslint-config-prettier": "6.10.1",
     "eslint-plugin-prettier": "3.1.2",
-    "mocha": "^6.1.4",
     "prettier": "2.0.4",
-    "semver": "^6.0.0",
-    "sinon": "^7.3.2",
-    "sinon-chai": "3.1.0",
+    "semver": "7.2.1",
     "typescript": "3.8.3"
   },
-  "scripts": {
-    "eslint": "eslint .",
-    "lint": "npm run eslint",
-    "pretest": "npm run eslint",
-    "test": "npm run mocha",
-    "mocha": "istanbul cover --root . --include-all-sources -x **/coverage/** -x **/client/** -x **/files/** -x **/node_modules/** -x **/bin/**  --dir ./coverage/mocha --report text --report text-summary --report lcov --print none  _mocha -- test/mocha/**/*.spec.js --reporter spec --timeout 10000",
-    "mocha:watch": "mocha test/mocha/**/*.spec.js -R nyan -w --timeout 10000",
-    "release": "node bin/mcfly-semantic-release.js"
-  },
-  "files": [
-    "lib",
-    "bin"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/miguelyoobic95/semantic-release-next.git"
-  },
-  "author": "",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/miguelyoobic95/semantic-release-next/issues"
   },
